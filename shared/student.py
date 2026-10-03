@@ -1,3 +1,3 @@
 STUDENT_NAME = "Барановський Максим Михайлович"
-GROUP_NAME = "КБ-303"
+GROUP_NAME = "КБ-203"
 VARIANT_NUMBER = 1
