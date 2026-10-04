@@ -1,14 +1,18 @@
 import random
 import string
+
 from data.task_condition import criteria, forbidden_passwords, passwords
 
-# Додавання 3 випадкових дублікатів зі списку
-for _ in range(3):
-    passwords.append(random.choice(passwords))
 
-
-def run_task1(passwords, criteria, forbidden_passwords):
+def run_task1():
     """Класифікація паролів за рівнями безпеки."""
+    # Створюємо копію списку, щоб не мутувати імпортовані дані під час повторних викликів
+    working_passwords = list(passwords)
+
+    # Додавання 3 випадкових дублікатів зі списку
+    for _ in range(3):
+        working_passwords.append(random.choice(passwords))
+
     forbidden_set = set(forbidden_passwords)
     special_chars = set(string.punctuation)
 
@@ -20,7 +24,7 @@ def run_task1(passwords, criteria, forbidden_passwords):
 
     min_len = criteria["min_length"]
 
-    for pwd in passwords:
+    for pwd in working_passwords:
         # Заборонені паролі відсікаємо одразу
         if pwd in forbidden_set:
             not_allowed_pwd.append(pwd)
@@ -40,7 +44,7 @@ def run_task1(passwords, criteria, forbidden_passwords):
         # Рахуємо кількість виконаних типів символів (від 1 до 4)
         char_types_count = sum([has_upper, has_lower, has_digit, has_special])
 
-        # Чітка градація надійності
+        # Градація надійності
         if len(pwd) >= min_len + 4 and char_types_count >= 3:
             very_strong_pwd.append(pwd)
         elif char_types_count >= 3:
@@ -57,4 +61,5 @@ def run_task1(passwords, criteria, forbidden_passwords):
     print("Дуже сильні:      ", ", ".join(very_strong_pwd) or "немає")
 
 
-run_task1(passwords, criteria, forbidden_passwords)
+if __name__ == "__main__":
+    run_task1()

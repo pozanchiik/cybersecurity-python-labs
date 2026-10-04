@@ -1,3 +1,4 @@
+# lab01
 ruff
     ruff check - Запуск лінтера
     ruff check --fix - Автоматичне виправлення помилок

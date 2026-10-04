@@ -172,4 +172,5 @@ def run_task3():
         print(f"Помилка валідації даних: {val_err}")
 
 
-run_task3()
+if __name__ == "__main__":
+    run_task3()
