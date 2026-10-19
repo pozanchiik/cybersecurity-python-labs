@@ -44,5 +44,6 @@ def run_task2():
             status = check_access(username, resource_level, users, blocked_users)
             print(f"user=[{username}] resource=[{resource_name}] -> {status}")
 
+
 if __name__ == "__main__":
     run_task2()

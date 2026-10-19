@@ -1,9 +1,9 @@
 import csv
-from datetime import datetime
-from functools import wraps
 import hashlib
 import json
 import os
+from datetime import datetime
+from functools import wraps
 
 from data.task_condition import USERS_TO_REGISTER
 
@@ -20,7 +20,7 @@ class ValidationError(Exception):
     """Помилка валідації довжини пароля."""
 
 
-def generate_hash(password, salt = "00000"):
+def generate_hash(password, salt="00000"):
     """Генерує хеш sha3_512 від конкатенації пароля та солі."""
     if password is None or salt is None or password == "" or salt == "":
         raise ValueError("Пароль та сіль не можуть бути порожніми")
@@ -30,7 +30,7 @@ def generate_hash(password, salt = "00000"):
             f"Пароль занадто короткий. Мінімум {MIN_PASSWORD_LENGTH} символів."
         )
 
-    data = f"{password}{salt}".encode("utf-8")
+    data = f"{password}{salt}".encode()
     return hashlib.sha3_512(data).hexdigest()
 
 
@@ -101,7 +101,7 @@ def log_event(func):
                 try:
                     with open(LOG_PATH, mode="r", encoding="utf-8") as jf:
                         records = json.load(jf)
-                except (json.JSONDecodeError, IOError):
+                except (OSError, json.JSONDecodeError):
                     records = []
 
             records.append(log_record)
@@ -166,7 +166,7 @@ def run_task3():
 
         print(f"\nПодії авторизації збережено у: {LOG_PATH}")
 
-    except (FileNotFoundError, PermissionError, IOError) as file_err:
+    except (OSError, FileNotFoundError, PermissionError) as file_err:
         print(f"Помилка вводу-виводу при роботі з файлами: {file_err}")
     except (ValidationError, ValueError) as val_err:
         print(f"Помилка валідації даних: {val_err}")
