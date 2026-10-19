@@ -1,6 +1,6 @@
 import argparse
-import json
 import csv
+import json
 import logging
 import re
 from collections import Counter
@@ -31,17 +31,39 @@ def parse_time(time_str: str) -> datetime:
 
 def parse_arguments():
     """Налаштування аргументів командного рядка (CLI)."""
-    parser = argparse.ArgumentParser(description="Аналізатор журналів веб-сервера (Nginx/Apache Access Log)")
-    parser.add_argument("--log-file", type=Path, required=True, help="Шлях до файлу access.log")
-    parser.add_argument("--output", type=Path, required=True, help="Шлях до файлу звіту")
-    parser.add_argument("--min-status", type=int, default=400, help="Мінімальний HTTP-статус для помилок (дефолт: 400)")
-    parser.add_argument("--top", type=int, default=5, help="Кількість топових IP (дефолт: 5)")
-    parser.add_argument("--format", choices=["json", "csv"], default="json", help="Формат звіту (json/csv)")
-    
+    parser = argparse.ArgumentParser(
+        description="Аналізатор журналів веб-сервера (Nginx/Apache Access Log)"
+    )
+    parser.add_argument(
+        "--log-file", type=Path, required=True, help="Шлях до файлу access.log"
+    )
+    parser.add_argument(
+        "--output", type=Path, required=True, help="Шлях до файлу звіту"
+    )
+    parser.add_argument(
+        "--min-status",
+        type=int,
+        default=400,
+        help="Мінімальний HTTP-статус для помилок (дефолт: 400)",
+    )
+    parser.add_argument(
+        "--top", type=int, default=5, help="Кількість топових IP (дефолт: 5)"
+    )
+    parser.add_argument(
+        "--format",
+        choices=["json", "csv"],
+        default="json",
+        help="Формат звіту (json/csv)",
+    )
+
     # Додаткові аргументи для фільтрації за часовим інтервалом
-    parser.add_argument("--start-time", type=str, help="Початковий час (формат: DD/MMM/YYYY:HH:MM:SS)")
-    parser.add_argument("--end-time", type=str, help="Кінцевий час (формат: DD/MMM/YYYY:HH:MM:SS)")
-    
+    parser.add_argument(
+        "--start-time", type=str, help="Початковий час (формат: DD/MMM/YYYY:HH:MM:SS)"
+    )
+    parser.add_argument(
+        "--end-time", type=str, help="Кінцевий час (формат: DD/MMM/YYYY:HH:MM:SS)"
+    )
+
     return parser.parse_args()
 
 
@@ -139,19 +161,29 @@ def main():
         "detected_attacks": detected_attacks,
     }
 
-# Вивантаження звіту в JSON або CSV
+    # Вивантаження звіту в JSON або CSV
     if args.format == "json":
-        with open(args.output, 'w', encoding='utf-8') as f:
+        with open(args.output, "w", encoding="utf-8") as f:
             json.dump(report_data, f, indent=4)
         logging.info(f"Analysis report saved to {args.output}")
     elif args.format == "csv":
-        with open(args.output, 'w', encoding='utf-8', newline='') as f:
+        with open(args.output, "w", encoding="utf-8", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(["Entity", "IP", "Count/Attack Type", "Details/URI", "Time"])
+            writer.writerow(
+                ["Entity", "IP", "Count/Attack Type", "Details/URI", "Time"]
+            )
             for ip, count in top_ips:
                 writer.writerow(["Top IP Error", ip, count, "N/A", "N/A"])
             for attack in detected_attacks:
-                writer.writerow(["Attack Alert", attack["ip"], attack["attack_type"], attack["uri"], attack["time"]])
+                writer.writerow(
+                    [
+                        "Attack Alert",
+                        attack["ip"],
+                        attack["attack_type"],
+                        attack["uri"],
+                        attack["time"],
+                    ]
+                )
         logging.info(f"Analysis report saved to {args.output}")
 
 

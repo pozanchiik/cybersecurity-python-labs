@@ -57,7 +57,11 @@ class User:
 
 class Admin(User):
     def __init__(
-        self, username: str, email: str, active: bool = True, permissions: set = None
+        self,
+        username: str,
+        email: str,
+        active: bool = True,
+        permissions: set | None = None,
     ):
         super().__init__(username, email, role="admin", active=active)
         self.permissions = permissions if permissions is not None else set()
@@ -139,9 +143,7 @@ class UserAccount:
             return False
 
     def is_authenticated(self) -> bool:
-        if self.session and self.session.is_active(SESSION_TIMEOUT_SEC):
-            return True
-        return False
+        return bool(self.session and self.session.is_active(SESSION_TIMEOUT_SEC))
 
     def logout(self):
         if self.session:
