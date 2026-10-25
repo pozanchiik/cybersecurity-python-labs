@@ -229,3 +229,7 @@ labs/**/data/
 *.csv
 *.json
 
+.lab_exmple/
+labs/lab03/data/*.sqlite3
+labs/lab03/data/*.sqlite3-*
+labs/lab03/data/*.db-*
